@@ -6,7 +6,7 @@ from bot import dp, bot
 from data.commands import getter, setter
 from handler_operator import register_operator_handler
 from handler_manager import register_manager_handler
-# from user import register_ser_handler
+from handler_admin import register_admin_handler
 from settings import config
 from markups import markups
 
@@ -21,23 +21,19 @@ async def start(message: types.Message):
 @dp.message_handler(Command("admin"), state=["*"])
 async def admin(message: types.Message, state: FSMContext):
     await state.finish()
-    # if str(message.from_user.id) in config.ADMIN_ID:
-    #     admin_ = await general_get.admin_select(message.from_user.id)
-    #     if not admin_:
-    #         await general_set.admin_add(message.from_user.id,
-    #                                     message.from_user.username,
-    #                                     message.from_user.first_name,
-    #                                     message.from_user.last_name)
-    #     len_product_wb = await general_get.products_wb_all()
-    #     len_product_ozon = await general_get.products_ozon_all()
-    #     await bot.send_message(message.from_user.id,
-    #                            "<b>Добро пожаловать в меню Администратора</b>\n"
-    #                            "<b>Вы можете просмотреть товары, загружать в Excel, "
-    #                            "редактировать и добавлять новые</b>\n\n"
-    #                            f"<b>Всего у вас товаров - {len(len_product_wb) + len(len_product_ozon)}</b>",
-    #                            reply_markup=AdminCheckMarkup.admin_check())
-    # else:
-    #     await bot.send_message(message.from_user.id, "У вас нет прав доступа!")
+    if str(message.from_user.id) in config.ADMIN_ID:
+        admin_ = await getter.admin_select(message.from_user.id)
+        if not admin_:
+            await setter.admin_add(message.from_user.id,
+                                   message.from_user.username,
+                                   message.from_user.first_name,
+                                   message.from_user.last_name)
+        await bot.send_message(message.from_user.id,
+                               "<b>Добро пожаловать в меню Администратора</b>\n"
+                               "<b>Вы можете загрузить отчёт Excel или посмотреть статистику</b>",
+                               reply_markup=markups.Admin.admin_main())
+    else:
+        await bot.send_message(message.from_user.id, "У вас нет прав доступа!")
 
 
 async def on_startup(_):
@@ -56,6 +52,7 @@ async def on_startup(_):
     """Регистрация хэндлеров"""
     register_operator_handler(dp)
     register_manager_handler(dp)
+    register_admin_handler(dp)
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True, on_startup=on_startup)

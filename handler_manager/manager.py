@@ -6,7 +6,6 @@ from aiogram.dispatcher import FSMContext
 from bot import bot
 from markups import markups
 from data.commands import getter, setter
-from states import states
 
 
 class ManagerMain:
@@ -28,7 +27,7 @@ class ManagerMain:
     @staticmethod
     async def get_task(callback: types.CallbackQuery):
         id_task = callback.data.split("_")[2]
-        task = await getter.select_order_exist(int(id_task))
+        task = await getter.select_order(int(id_task))
         if task.manager_user_id:
             await bot.delete_message(callback.from_user.id, callback.message.message_id)
             await bot.send_message(callback.from_user.id,
@@ -52,4 +51,3 @@ class ManagerMain:
         await setter.manager_done_task(int(id_task), datetime.now())
         await callback.message.edit_text("Данная задача была выполнена!",
                                          reply_markup=markups.Manager.manager_main())
-
