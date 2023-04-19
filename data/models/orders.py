@@ -8,10 +8,12 @@ class Orders(BaseModel):
     query: sql.select
 
     id = Column(Integer, primary_key=True, nullable=False)
-    user_id_operator = Column(BigInteger, nullable=False)
+    operator_user_id = Column(BigInteger, nullable=False)
+    operator_name = Column(String)
     description = Column(String)
     create_task = Column(TIMESTAMP)
     get_task = Column(TIMESTAMP)
-    user_id_manager = Column(BigInteger)
+    manager_user_id = Column(BigInteger)
+    manager_name = Column(String)
     done_task = Column(TIMESTAMP)
 

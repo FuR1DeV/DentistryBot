@@ -5,6 +5,7 @@ from aiogram.dispatcher import FSMContext
 from bot import dp, bot
 from data.commands import getter, setter
 from handler_operator import register_operator_handler
+from handler_manager import register_manager_handler
 # from user import register_ser_handler
 from settings import config
 from markups import markups
@@ -54,6 +55,7 @@ async def on_startup(_):
 
     """Регистрация хэндлеров"""
     register_operator_handler(dp)
+    register_manager_handler(dp)
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True, on_startup=on_startup)

@@ -13,3 +13,8 @@ def register_operator_handler(disp: Dispatcher):
     disp.register_callback_query_handler(OperatorMain.operator_main,
                                          state=["*"],
                                          text="operator_main")
+    disp.register_callback_query_handler(OperatorMain.create_task,
+                                         state=["*"],
+                                         text="create_task")
+    disp.register_message_handler(OperatorMain.description,
+                                  state=states.OperatorStates.description)

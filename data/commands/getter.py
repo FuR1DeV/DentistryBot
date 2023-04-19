@@ -10,6 +10,16 @@ async def operator_select(user_id):
     return operator
 
 
-async def manger_select(user_id):
+async def manager_select(user_id):
     manager = await Manager.query.where(Manager.user_id == user_id).gino.first()
     return manager
+
+
+async def manager_select_all():
+    managers = await Manager.query.gino.all()
+    return managers
+
+
+async def select_order_exist(id_task):
+    task = await Orders.query.where(Orders.id == id_task).gino.first()
+    return task
